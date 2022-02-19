@@ -1,38 +1,43 @@
-<div id="<%= dom_id product %>" class="col">
-  <div class="card text-dark bg-light border-secondary">
-    <div class="card-header">
-      <h5 class="float-start"><%= product.name %></h5>
-      <span class="float-end">£<%= product.price %></span>
-    </div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item">
-        <%= image_tag product.image, style: "height: 100px;", class: "mx-auto d-block" %>
-      </li>
-      <li class="list-group-item">
-        <div class="container">
-          <div class="col float-start">
-            In stock:
-            <% if product.in_stock > 0 %>
+<%= turbo_frame_tag product do %>
+  <div class="col">
+    <div class="card text-dark bg-light border-secondary">
+      <div class="card-header">
+        <h5 class="float-start"><%= product.name %></h5>
+        <span class="float-end">£<%= product.price %></span>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <%= image_tag product.image, style: "height: 100px;", class: "mx-auto d-block" %>
+        </li>
+        <li class="list-group-item">
+          <%= DateTime.now.strftime("%H:%M:%S") %>
+        </li>
+        <li class="list-group-item">
+          <div class="container">
+            <div class="col float-start">
+              In stock:
+              <% if product.in_stock > 0 %>
+                <span class="badge bg-primary">
+                  <%= product.in_stock %>
+                </span>
+              <% else %>
+                <span class="badge bg-danger">
+                  Sold out!
+                </span>
+              <% end %>
+            </div>
+            <div class="col float-end">
+              Total sold: 
               <span class="badge bg-primary">
-                <%= product.in_stock %>
+                <%= Sale.where(product: product).count %>
               </span>
-            <% else %>
-              <span class="badge bg-danger">
-                Sold out!
-              </span>
-            <% end %>
+            </div>
           </div>
-          <div class="col float-end">
-            Total sold: 
-            <span class="badge bg-primary">
-              <%= Sale.where(product: product).count %>
-            </span>
-          </div>
-        </div>
-      </li>
-      <li class="list-group-item">
-        <%= render "sales/form", sale: Sale.new(product: product, user: current_user) %>
-      </li>
-    </ul>
+        </li>
+        <li class="list-group-item">
+          <%= render "sales/form", sale: Sale.new(product: product, user: current_user) %>
+        </li>
+      </ul>
+    </div>
   </div>
-</div>
+<% end %>
