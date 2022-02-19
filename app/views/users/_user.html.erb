@@ -1,0 +1,20 @@
+<div id="<%= dom_id user %>">
+  <div class="card text-dark bg-light border-secondary">
+    <div class="card-header">
+      <h5><%= user.name %></h5>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <%= image_tag user.avatar, style: "height: 100px;", class: "mx-auto d-block" %>
+      </li>
+      <% Product.all.each do |product| %>
+        <li class="list-group-item">
+          <%= product.name %>
+          <span class="badge bg-secondary float-end">
+            <%= Sale.where(user: user, product: product).count %>
+          </span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
